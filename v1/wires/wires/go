@@ -1,0 +1,49 @@
+
+while(true)
+do
+
+
+sh ./on4
+sleep 0.05
+sh ./on2
+sleep 0.05
+
+sh ./on17
+sleep 0.05
+sh ./on22
+sleep 0.05
+sh ./on10
+sleep 0.05
+
+sh ./on9
+sleep 0.05
+sh ./on7
+sleep 0.05
+sh ./on8
+sleep 0.05
+sh ./on11
+sleep 0.05
+
+
+
+
+sh ./off4
+sleep 0.05
+sh ./off2
+sleep 0.05
+
+sh ./off17
+sleep 0.05
+sh ./off22
+sh ./off10
+sleep 0.05
+sh ./off9
+sleep 0.05
+sh ./off7
+sleep 0.05
+sh ./off8
+sleep 0.05
+sh ./off11
+sleep 0.05
+
+done

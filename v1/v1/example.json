@@ -1,0 +1,25 @@
+{
+ "status": "ok",
+ "timestamp": "000000",
+ "message": "this is a message",
+ "lights" : { "id":"0",
+                "state":"0",             
+                "lastupdated":"00000"
+              }            
+            
+}
+
+
+{
+ "timestamp": "000000",
+ "consumer key": "ABCDEFGH",
+ "secret": "XYZ012345",
+ "lights" : [ { "id":"0",
+                "state":"0"             
+              },
+              { "id":"1",
+                "state":"1"            
+               }  
+             ]
+            
+}
