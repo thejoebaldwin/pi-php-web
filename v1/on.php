@@ -9,7 +9,7 @@
 <form name="input" action="on.php" method="post" >
 
 <?php
-$db = new PDO('sqlite:/var/www/pi.s3db');
+$db = new PDO('sqlite:/var/www/v1/pi.s3db');
 $result  = $db->query('select * from lights');
 
 

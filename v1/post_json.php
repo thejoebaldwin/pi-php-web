@@ -44,7 +44,7 @@ $secret = "";
 $sql = "SELECT * FROM Users WHERE key = '" . $key . "';";
 //echo $sql;
 
-$db = new PDO('sqlite:/var/www/pi.s3db');
+$db = new PDO('sqlite:/var/www/v1/pi.s3db');
 
 $result  = $db->query($sql);
 

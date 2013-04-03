@@ -3,7 +3,7 @@ echo "out" > /sys/class/gpio/gpio11/direction
 echo "1" > /sys/class/gpio/gpio11/value
 
 
-for VARIABLE in 2 3 4 17 27 22 10 9 11 14 15 18 23 24 25 8 7
+for VARIABLE in  2 3 4 7 8 9 10 11 14 15 17 18 22 23 24  
 do
 	
 
@@ -19,7 +19,7 @@ while(true)
 do
 
 #for VARIABLE in 2 3 4 7 8 9 10 11 14 15 17 18 22 23 24 25 27
-for VARIABLE in 2 4 7 8 9 10 11 14 15 17 18 22 23 24 25 
+for VARIABLE in  2 3 4 7 8 9 10 11 14 15 17 18 22 23 24  
 
 do
 	echo "Testing GPOIO$VARIABLE"
@@ -36,7 +36,7 @@ done
 
 
 
-for VARIABLE in 25 24 23 22 18 17 15 14 11 10 9 8 7 4 2
+for VARIABLE in  2 3 4 7 8 9 10 11 14 15 17 18 22 23 24  
 do
 	echo "Testing GPOIO$VARIABLE"
 	for VARIABLE2 in 1 

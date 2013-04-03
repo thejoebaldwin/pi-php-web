@@ -1,9 +1,0 @@
-echo "Clearing Wire 22: Yellow"
-echo "0" > /sys/class/gpio/gpio22/value
-echo "22" > /sys/class/gpio/unexport
-echo "Clearing Wire 17: Green"
-echo "0" > /sys/class/gpio/gpio17/value
-echo "17" > /sys/class/gpio/unexport
-echo "Clearing Wire 4: Red"
-echo "0" > /sys/class/gpio/gpio4/value
-echo "4" > /sys/class/gpio/unexport
