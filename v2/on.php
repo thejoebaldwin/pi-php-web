@@ -6,8 +6,12 @@
 
 <?php
 require_once('class.light.php');
-$db = new PDO('sqlite:/var/www/v2/pi.s3db');
-$result  = $db->query('select * from lights');
+require_once('class.database.php');
+
+$db = new Database();
+$db->SetVersion('v2');
+$result  = $db->Query('select * from lights');
+
 $array = array();
 $update_sql = "";
 $counter = 0;
@@ -60,17 +64,14 @@ foreach($array as $light)
  if ($_SERVER['REQUEST_METHOD'] == "POST" && $update_sql != "")
     {
         echo($update_sql);
-        $db->exec($update_sql);
+        $db->Query($update_sql);
         $db = NULL;
     }
 
 ?>
 
-
 <input type="submit" value="Submit">
 </form>
-
-
 </body>
 
 
