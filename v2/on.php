@@ -1,87 +1,66 @@
 <html>
 <head>
-
-
 </head>
 <body>
-
-
 <form name="input" action="on.php" method="post" >
 
 <?php
-$db = new PDO('sqlite:/var/www/v1/pi.s3db');
+require_once('class.light.php');
+$db = new PDO('sqlite:/var/www/v2/pi.s3db');
 $result  = $db->query('select * from lights');
-
-
+$array = array();
 $update_sql = "";
 $counter = 0;
+
 foreach($result as $row)
 {
+    //check db value
+    //   then check post value
+    //   build query to update db from post value
+    $light = new Light();
+    $light->Id = $row['id'];
+    $light->State  = $row['state'];
+    $light->Pin  = $row['pin'];
+    $light->LastUpdated  = $row['lastupdated'];
+    array_push($array, $light);
+}
 
-if ($counter > -1)
+foreach($array as $light)
 {
-   //check db value
-   // then check post value
-   //build query to update db from post value
-   
-
-
-    $id = $row['id'];
-    $state = $row['state'];
-$pin  = $row['pin'];
-$lastupdated  = $row['lastupdated'];
-echo ($id . " " . $state . " " . $pin . " " . $lastupdated);
-
-    $checked = "";
-    if ($state == "1" || $state=="Y")
-    {
-        $checked = "checked";
-    }
-    
-    if ($_SERVER['REQUEST_METHOD'] == "POST")
-    {
-        //compare this to what is in db
-        $post_state = "0";
-        if (isset($_POST["light" .  $row['id']]))
-        {
-          $post_state = "1";
-        }
-        
-        if ($post_state != $state)
-        {
-            $update_sql = $update_sql . 'UPDATE lights SET state=' . $post_state . ',lastupdated=' . time() .  ' WHERE id = '. $id . ';';
-        }
-        
+        echo ($light->Id . " " . $light->State . " " . $light->Pin . " " . $light->LastUpdated);
         $checked = "";
-        if ($post_state == "1")
+        if ($light->State == "1" || $light->State=="Y")
         {
             $checked = "checked";
         }
-        
-    }
     
+        if ($_SERVER['REQUEST_METHOD'] == "POST")
+        {
+            //compare this to what is in db
+            $post_state = "0";
+            if (isset($_POST["light" .  $light->Id]))
+            {
+              $post_state = "1";
+            }
+            if ($post_state != $light->State)
+            {
+                $update_sql = $update_sql . 'UPDATE lights SET state=' . $post_state . ',lastupdated=' . time() .  ' WHERE id = '. $light->Id . ';';
+            }
+            $checked = "";
+            if ($post_state == "1")
+            {
+                $checked = "checked";
+            }
+        }
     ?>
-
-    
-    
-<input <?php echo $checked ?> type="checkbox" name="light<?php echo $id  ?>" value="light<?php echo $id  ?>">Light <?php  echo $id ?> <br/>
-    
+    <input <?php echo $checked ?> type="checkbox" name="light<?php echo $light->Id  ?>" value="light<?php echo $light->Id ?>">Light <?php  echo $light->Id ?> <br/>
     <?php
-   }
-$counter++;
-
-}
-
-
+ }
 
  if ($_SERVER['REQUEST_METHOD'] == "POST" && $update_sql != "")
     {
         echo($update_sql);
-
-  
-    
         $db->exec($update_sql);
-echo ("WRITING TO DB");
         $db = NULL;
     }
 
