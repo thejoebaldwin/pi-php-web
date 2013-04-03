@@ -1,0 +1,171 @@
+.box img {margin-right:3px;}
+ 
+
+ 
+html
+{
+ padding:0px;
+ background-color:black;
+ text-align:center;
+}
+ 
+body
+{
+ font-family:"Times New Roman";
+ padding:0;
+ margin:0;
+}
+ 
+	
+#hum
+{
+ height:591px;
+ width:698px;
+ background-image:url('./images/hum_white.png');
+ background-repeat:no-repeat;
+}
+ 
+#content
+{
+ font-family:Tahoma;
+ color:white;
+ font-size:medium;
+ margin-bottom:20px;
+}
+	
+.barRow .middleBar
+{
+ background-image:url('/images/banner_bar_middle.png');
+ background-repeat:repeat-x;
+ background-position: 0 0px;
+ height:8px;
+ 
+ width:100%;
+}
+ 
+.middleRow .leftBar
+{
+ 
+}
+ 
+.box
+{
+ text-align:left;
+ padding:20px;
+ padding-top:5px;
+ border-bottom:2px solid #009DBA;
+}
+ 
+.wrapper
+{
+ color:white;
+ width:97%;
+ padding:3px;
+ border-bottom:2px solid #D40000;
+ /*margin-top:10px;*/
+}
+ 
+#header
+{
+ background: url("/images/gradient.png") bottom repeat-x;
+}
+ 
+#headerWrapper
+{
+ background: url("/images/gradient_down.png") top repeat-x;
+ 
+}
+ 
+#content
+{
+ background: url("/images/gradient.png") bottom repeat-x;
+ text-align:left;width:100%;padding-bottom:20px;
+}
+ 
+#contentWrapper
+{
+ background: url("/images/gradient_down.png") top repeat-x;
+ 
+ 
+}
+ 
+#bannerTop
+{
+ text-align:center;padding-bottom:2px;
+}
+ 
+#IA
+{
+	font-size:xx-large;
+	font-style:italic;
+	font-family:"Times New Roman", Times, serif;
+	color:white;
+	margin-top:4px;
+}
+ 
+.links
+{
+	list-style-type:none;
+	text-align:left;
+	
+	margin-left:0px;
+  margin:0px;
+  margin-bottom:20px;
+  margin-top:5px;
+}
+ 
+.links li
+{
+	
+	margin-left:5px;
+	
+}
+ 
+.links a
+{
+	color:white;
+}
+ 
+.linkHeader
+{
+	padding:0px;
+	margin:0px;
+}
+ 
+#rightColumn
+{
+	width:200px;
+	padding-top:35px;
+}
+ 
+ 
+.wrapper
+{
+	 border-top:2px solid #009DBA;	
+}
+ 
+.box
+{
+	 border-top:2px solid #D40000;
+}
+ 
+#pageMessage
+{
+	color:white;
+	padding:5px;
+	padding-top:0px;
+}
+#pageMessage p
+{
+	margin:0;
+	display:inline;
+	padding:0;
+}
+ 
+ 
+.text {color:White; }
+body:nth-of-type(1) .barRow .middleBar{
+   width:auto;
+}
+ 
+a img { border:none;}
