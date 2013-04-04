@@ -2,6 +2,7 @@
 require_once('class.light.php');
 require_once('class.database.php');
 
+
 $array = array();
 $json = file_get_contents('php://input');
 $serverTimestamp = mktime();
