@@ -9,10 +9,62 @@ var wpi = require( 'node-wiringpi' );
 var url = require('url');
 var qs = require('querystring');
 var sleep = require('sleep');
+var sqlite3 = require('sqlite3').verbose();
 
 var pins;
 
 var pins_final;
+
+
+function closeDb() {
+    console.log("closeDb");
+  //  db.close();
+}
+
+function createDb(callback) {
+    console.log("createDb");
+  
+    db = new sqlite3.Database('pi2.s3db', callback);
+}
+
+var db;
+
+function save() {
+     
+    var cmd = '';
+    for (var i = 0; i < pins_final.length;i++)
+    {
+     cmd =  "UPDATE Lights SET pin_mapped = ? WHERE pin = ?;"
+     db.run(cmd, pins_final[i], i);
+    }
+    closeDb();
+
+}
+
+function nothing()
+{
+    
+}
+
+function load() {
+
+    console.log('load()');
+    db.all("SELECT * FROM Lights ORDER BY pin", function (err, rows) {
+        var i = 0;
+        rows.forEach(function (row) {
+        
+           console.log("adding pin " + row.id + " to mapped " + row.pin_mapped);
+            pins_final.push(row.pin_mapped);
+          
+        });
+        closeDb();
+     
+        
+    });
+}
+
+
+
 
 function init()
 {
@@ -20,17 +72,17 @@ function init()
  // console.log( "you have " + wpi.num_pins() + " GPIO pins." );
  
  pins = new Array (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14 , 15, 16);
- ids = new Array ();
+ ids = new Array  (-1, -1,-1, -1,-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,-1 , -1, -1);
  
  pins_final = new Array();
  
  for (var i = 0; i < pins.length;i++)
-{
+ {
   console.log("setting pin " +  i + " OUT");
   wpi.pin_mode( pins[i], wpi.PIN_MODE.OUTPUT );
  }
- 
 
+  createDb(load);
 }
 
 var request;
@@ -48,7 +100,7 @@ function loop()
     var j = 0;
     
     pins_final = new Array();
-    
+  
     for (var i = 0; i < ids.length;i++)
     {
          for (var j = 0; j< ids.length;j++)
@@ -64,35 +116,55 @@ function loop()
      
     }
     
+      createDb(save);
+      
+
+ 
     
-while (j < 40)
+    
+}
+
+
+function allDone()
 {
+    console.log("allDone");
+    response.end();
+}
+
+function someJob( callback ) {
+    // heavy work
     
-    
-    
-    
+    var j = 0;
+    while (j < 10)
+{
     
     for (var i = 0; i < pins_final.length;i++)
     {
-         wpi.digital_write(  pins_final[i], wpi.WRITE.HIGH );
-      sleep.usleep(50000);
+        wpi.digital_write(  pins_final[i], wpi.WRITE.HIGH );
+        sleep.usleep(30000);
+        wpi.digital_write(  pins_final[i], wpi.WRITE.LOW );
+        sleep.usleep(30000);
+        wpi.digital_write(  pins_final[i], wpi.WRITE.HIGH );
+        sleep.usleep(30000);
+         wpi.digital_write(  pins_final[i], wpi.WRITE.LOW );
     }
     
-     for (var i = 0; i < pins_final.length;i++)
+     for (var i = pins_final.length -1; i >= 0;i--)
     {
-      
-      
-      
+       wpi.digital_write(  pins_final[i], wpi.WRITE.HIGH );
+        sleep.usleep(30000);
+        wpi.digital_write(  pins_final[i], wpi.WRITE.LOW );
+        sleep.usleep(30000);
+        wpi.digital_write(  pins_final[i], wpi.WRITE.HIGH );
+        sleep.usleep(30000);
          wpi.digital_write(  pins_final[i], wpi.WRITE.LOW );
-      
-      sleep.usleep(50000);
     }
     
     j++;
 }
- 
     
     
+    process.nextTick( callback );
 }
 
 function clearPins()
@@ -175,6 +247,51 @@ function startConfig()
     
 }
 
+//TODO: add support for multiple pins
+function startControl()
+{
+      if (request.method == 'POST') {
+        var body = '';
+        request.on('data', function (data) {
+            body += data;
+        });
+        request.on('end', function () {
+        var config = JSON.parse(body);
+           
+        console.log("config.mode=" + config.mode);
+        if (config.mode == 'control')
+            {
+                for (var i = 0; i < config.lights.length;i++)
+                {
+                    if (config.lights[i].state == "on")
+                    {
+                      wpi.digital_write(pins_final[config.lights[i].id], wpi.WRITE.HIGH );
+                    }
+                    else
+                    {
+                      wpi.digital_write(pins_final[config.lights[i].id], wpi.WRITE.LOW );
+                    }
+                    console.log("config.state=" + config.lights[i].state + "||config.id=" + config.lights[i].id);
+                }
+                //response.write("{\"status\":\"ok\", \"message\": \"done controlling pin\", \"pin\":\"" + config.id + "\", \"state\": \"" + config.state + "\"}");
+                response.end();
+            }
+            else {
+                response.write("{\"status\":\"error\", \"message\": \"no parameter provided\"}");
+                response.end();
+              }
+           
+        });
+    }
+
+    
+    
+    
+    
+}
+
+
+
 init();
 
 http.createServer( function(req,res) {
@@ -199,7 +316,16 @@ http.createServer( function(req,res) {
         if (queryData.cmd == "config") {
             startConfig();
         }
-        
+        else if  (queryData.cmd == "control") {
+            startControl();
+        }
+        else if  (queryData.cmd == "loop") {
+           someJob(allDone);
+        }
+        else if  (queryData.cmd == "test") {
+          console.log("test");
+          response.end();
+        }
         else {
             res.write("{\"status\":\"error\", \"message\": \"no parameter provided\"}");
             res.end();
