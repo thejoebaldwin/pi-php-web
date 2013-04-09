@@ -8,9 +8,38 @@ UP_BUTTON="11110111"
 DOWN_BUTTON="11111011"
 LEFT_BUTTON="11111101"
 RIGHT_BUTTON="11111110"
+UP_LEFT="11110101"
+UP_RIGHT="11110110"
+DOWN_LEFT="11111001"
+DOWN_RIGHT="11111010"
+A_B="00111111"
+
+A_START=""
+A_SELECT=""
+A_RIGHT="01111110"
+A_LEFT="01111101"
+A_UP="01110111"
+A_DOWN="01111011"
+A_UP_LEFT="01110101"
+A_UP_RIGHT="01110110"
+A_DOWN_LEFT="01111001"
+A_DOWN_RIGHT="01111010"
+
+B_START=""
+B_SELECT=""
+B_RIGHT="10111110"
+B_LEFT="10111101"
+B_UP="10110111"
+B_DOWN="10111011"
+B_UP_LEFT="10110101"
+B_UP_RIGHT="10110110"
+B_DOWN_LEFT="10111001"
+B_DOWN_RIGHT="10111010"
+
+
 
 #larger value will decrease sensitivity of controller
-DELAY=0.00005
+DELAY=0.0000005
 
 #clock
 echo "14" > /sys/class/gpio/unexport
@@ -65,16 +94,19 @@ do
         echo "0" > /sys/class/gpio/gpio14/value
         sleep $DELAY
 	done
+ 
+       #output bits for debugging
+       #echo $OLDVAL
        
        #compare the resulting bits to known button values
        if [ "$OLDVAL" = "$A_BUTTON" ]; then
-                 echo "A BUTTON"
+                 echo "A"
                  #turn light on (optional)
                  echo "1" > /sys/class/gpio/gpio7/value
        fi
 
  	if [ "$OLDVAL" =  "$B_BUTTON" ]; then
-                 echo "B BUTTON"
+                 echo "B"
                  #turn light off (optional)
                  echo "0" > /sys/class/gpio/gpio7/value
        fi
@@ -103,6 +135,90 @@ do
                  echo "RIGHT"
        fi
 
+       if [ "$OLDVAL" =  "$UP_LEFT" ]; then
+                 echo "UP LEFT"
+       fi
+
+	if [ "$OLDVAL" =  "$UP_RIGHT" ]; then
+                 echo "UP RIGHT"
+       fi
+
+	if [ "$OLDVAL" =  "$DOWN_LEFT" ]; then
+                 echo "DOWN LEFT"
+       fi
+
+	if [ "$OLDVAL" =  "$DOWN_RIGHT" ]; then
+                 echo "DOWN RIGHT"
+       fi
+
+	if [ "$OLDVAL" =  "$A_RIGHT" ]; then
+                 echo "A RIGHT"
+       fi
+
+	if [ "$OLDVAL" =  "$A_LEFT" ]; then
+                 echo "A LEFT"
+       fi
+
+	if [ "$OLDVAL" =  "$A_UP" ]; then
+                 echo "A UP"
+       fi
+
+	if [ "$OLDVAL" =  "$A_DOWN" ]; then
+                 echo "A DOWN"
+       fi
+
+	if [ "$OLDVAL" =  "$A_UP_LEFT" ]; then
+                 echo "A UP LEFT"
+       fi
+
+	if [ "$OLDVAL" =  "$A_UP_RIGHT" ]; then
+                 echo "A UP RIGHT"
+       fi
+
+	if [ "$OLDVAL" =  "$A_DOWN_LEFT" ]; then
+                 echo "A DOWN LEFT"
+       fi
+
+	if [ "$OLDVAL" =  "$A_DOWN_RIGHT" ]; then
+                 echo "A DOWN RIGHT"
+       fi
+
+       if [ "$OLDVAL" =  "$B_RIGHT" ]; then
+                 echo "B RIGHT"
+       fi
+
+	if [ "$OLDVAL" =  "$B_LEFT" ]; then
+                 echo "B LEFT"
+       fi
+
+	if [ "$OLDVAL" =  "$B_UP" ]; then
+                 echo "B UP"
+       fi
+
+	if [ "$OLDVAL" =  "$B_DOWN" ]; then
+                 echo "B DOWN"
+       fi
+
+	if [ "$OLDVAL" =  "$B_UP_LEFT" ]; then
+                 echo "B UP LEFT"
+       fi
+
+	if [ "$OLDVAL" =  "$B_UP_RIGHT" ]; then
+                 echo "B UP RIGHT"
+       fi
+
+	if [ "$OLDVAL" =  "$B_DOWN_LEFT" ]; then
+                 echo "B DOWN LEFT"
+       fi
+
+	if [ "$OLDVAL" =  "$B_DOWN_RIGHT" ]; then
+                 echo "B DOWN RIGHT"
+       fi
+
+
+
        #clear OLDVAL value for next button press
        OLDVAL=''
+       #pause until keypress for debugging
+       #read myvalue
 done
