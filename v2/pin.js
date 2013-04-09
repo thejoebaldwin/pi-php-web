@@ -261,6 +261,23 @@ function startControl()
         console.log("config.mode=" + config.mode);
         if (config.mode == 'control')
             {
+
+                //do timestamp math here
+                var clienttimestamp = config.timestamp;
+                var servertimestamp = new Date().getTime();
+                servertimestamp = Math.floor(servertimestamp / 1000000);
+        
+//        if (servertimestamp != clienttimestamp)
+  //              {
+             //   var json  = "{\"status\":\"error\", \"message\": \"there is a problem with your timestamp\", \"timestamp\":\"" + servertimestamp   + "\, \"received_timestamp\":\"" + clienttimestamp + "\" }";
+               // console.log(json);
+               // response.write(json);
+               // response.end();
+
+//                }
+  //              else
+    //            { 
+
                 for (var i = 0; i < config.lights.length;i++)
                 {
                     if (config.lights[i].state == "on")
@@ -273,8 +290,10 @@ function startControl()
                     }
                     console.log("config.state=" + config.lights[i].state + "||config.id=" + config.lights[i].id);
                 }
+      //          }
                 //response.write("{\"status\":\"ok\", \"message\": \"done controlling pin\", \"pin\":\"" + config.id + "\", \"state\": \"" + config.state + "\"}");
-                response.end();
+response.write("{\"status\":\"ok\",\"message\": \"light successfully configured\"}");               
+ response.end();
             }
             else {
                 response.write("{\"status\":\"error\", \"message\": \"no parameter provided\"}");

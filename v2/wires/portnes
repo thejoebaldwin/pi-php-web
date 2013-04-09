@@ -1,0 +1,139 @@
+#!/bin/bash
+
+CLOCK="14"
+LATCH="15"
+DATA= "18"
+
+A_BUTTON="01111111"
+B_BUTTON="10111111"
+SELECT_BUTTON="11011111"
+START_BUTTON="11101111"
+
+
+UP_BUTTON="11110111"
+DOWN_BUTTON="11111011"
+LEFT_BUTTON="11111101"
+RIGHT_BUTTON="11111110"
+
+
+
+
+
+
+
+
+
+
+echo $CLOCK 
+
+#clock
+echo "14" > /sys/class/gpio/unexport
+#latch
+echo "15" > /sys/class/gpio/unexport
+#data
+echo "18" > /sys/class/gpio/unexport
+
+#light
+echo "7" > /sys/class/gpio/unexport
+
+#clock
+echo "14" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio14/direction
+#latch
+echo "15" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio15/direction
+
+#data
+echo "18" > /sys/class/gpio/export
+echo "in" > /sys/class/gpio/gpio18/direction
+
+#clock
+echo "1" > /sys/class/gpio/gpio14/value
+#latch
+echo "1" > /sys/class/gpio/gpio15/value
+
+#light
+echo "7" > /sys/class/gpio/export
+echo "out" > /sys/class/gpio/gpio7/direction
+echo "0" > /sys/class/gpio/gpio7/value
+clear
+
+while (true)
+do
+    #echo "new cycle";
+    
+    #clock
+    echo "0" > /sys/class/gpio/gpio14/value
+    #latch
+    echo "0" > /sys/class/gpio/gpio15/value
+    echo "1" > /sys/class/gpio/gpio15/value
+    sleep 0.0005
+    echo "0" > /sys/class/gpio/gpio15/value
+    #data
+      st=`cat /sys/class/gpio/gpio18/value` 
+          
+        OLDVAL=$OLDVAL$st
+    #cat  /sys/class/gpio/gpio18/value | tr '' '\n'
+    for VARIABLE in  1 2 3 4 5 6 7
+    #OLDVAL=""
+  do
+         #turn clock tick on
+         #clock
+        echo "1" > /sys/class/gpio/gpio14/value
+        #get data
+        #cat /sys/class/gpio/gpio18/value  | tr '' '\n'
+        st=`cat /sys/class/gpio/gpio18/value` 
+          
+        OLDVAL=$OLDVAL$st
+        
+        sleep 0.0005
+        #turn click tick off
+        #clock
+         echo "0" > /sys/class/gpio/gpio14/value
+          sleep 0.0005
+done
+
+
+
+         #echo "$OLDVAL"
+
+
+
+        if [ "$OLDVAL" ==  "$A_BUTTON" ]; then
+                 echo "A BUTTON"
+                 echo "1" > /sys/class/gpio/gpio7/value
+        fi
+        
+         if [ "$OLDVAL" ==  "$B_BUTTON" ]; then
+                 echo "B BUTTON"
+                 echo "0" > /sys/class/gpio/gpio7/value
+        fi
+        
+         if [ "$OLDVAL" ==  "$SELECT_BUTTON" ]; then
+                 echo "SELECT BUTTON"
+        fi
+        
+        if [ "$OLDVAL" ==  "$START_BUTTON" ]; then
+                 echo "START BUTTON"
+        fi
+        
+        if [ "$OLDVAL" ==  "$UP_BUTTON" ]; then
+                 echo "UP BUTTON"
+        fi
+        
+        if [ "$OLDVAL" ==  "$DOWN_BUTTON" ]; then
+                 echo "DOWN BUTTON"
+        fi
+        
+        if [ "$OLDVAL" ==  "$LEFT_BUTTON" ]; then
+                 echo "LEFT BUTTON"
+        fi
+        
+        if [ "$OLDVAL" ==  "$RIGHT_BUTTON" ]; then
+                 echo "RIGHT BUTTON"
+        fi
+        OLDVAL=''
+        #read var_name
+    
+    
+done
